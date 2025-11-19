@@ -1,0 +1,17 @@
+simple-bookshelf
+================
+
+Why
+---
+
+I often need to look up details about the books I own when I am outside.
+But that's not always possible because I own and read a lot of books and
+it's hard to remember them all, especially if a book wasn't particularly
+memorable. This page lets me store my entire library so I can quickly
+search and check specific information from anywhere when I am not at home.
+
+Usage
+-----
+
+1. Edit the `BOOKS` array in `books.js` with your collection.
+2. Open (or serve) `index.html` in a browser to browse and search your shelf anywhere online.

@@ -1,3 +1,4 @@
+// TODO: Store all my books here.
 var BOOKS = [
     {
         "title": "The Great Gatsby",

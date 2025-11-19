@@ -45,7 +45,15 @@ body {
 h1 {
     font-size: 16px;
     font-weight: bold;
-    margin: 0 0 20px 0;
+    margin: 0;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
 .controls {
@@ -221,6 +229,12 @@ tr:hover td {
 @media (max-width: 768px) {
     body {
         margin: 0.5rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
 
     .controls {

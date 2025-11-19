@@ -23,7 +23,7 @@ body.dark-theme {
     --dashed-border: #555;
     --hover-bg: #2a2a2a;
     --secondary-text: #999;
-    --link-color: #8ab4f8;
+    --link-color: #f8d66d;
     --modal-bg: #252525;
     --details-overlay: rgba(0, 0, 0, 0.8);
     --modal-shadow: rgba(0, 0, 0, 0.5);
@@ -119,11 +119,6 @@ tr:hover td {
     background-color: var(--hover-bg);
 }
 
-.col-id {
-    width: 40px;
-    color: var(--secondary-text);
-}
-
 .col-title {
     width: 25%;
 }
@@ -154,6 +149,36 @@ tr:hover td {
     color: var(--secondary-text);
     border-top: 1px solid var(--input-border);
     padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#book-count {
+    white-space: nowrap;
+}
+
+.source-link {
+    font-size: 12px;
+    color: var(--secondary-text);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: auto;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.source-link a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.source-link a:hover,
+.source-link a:focus {
+    text-decoration: underline;
 }
 
 .details-overlay {
@@ -257,10 +282,6 @@ tr:hover td {
         word-break: break-word;
         font-size: 11px;
         padding: 4px 2px;
-    }
-
-    .col-id {
-        width: 20px;
     }
 
     .col-title {

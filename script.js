@@ -40,7 +40,7 @@ function renderBooks(searchTerm = '') {
     document.getElementById('book-count').textContent = `${filtered.length} items`;
 
     if (filtered.length === 0) {
-        list.innerHTML = `<tr><td colspan="7" style="color: var(--secondary-text); padding: 20px 0;">-- no matches found --</td></tr>`;
+        list.innerHTML = `<tr><td colspan="6" style="color: var(--secondary-text); padding: 20px 0;">-- no matches found --</td></tr>`;
         return;
     }
 
@@ -50,7 +50,6 @@ function renderBooks(searchTerm = '') {
         row.onclick = () => showDetails(book.id);
 
         row.innerHTML = `
-             <td class="col-id">${String(book.id).padStart(3, '0')}</td>
              <td class="col-title">${book.title}</td>
              <td class="col-author">${book.author}</td>
              <td class="col-genre">[${book.genre}]</td>

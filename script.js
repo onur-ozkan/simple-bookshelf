@@ -19,11 +19,6 @@ function switchTheme() {
     localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
 }
 
-const booksWithIds = BOOKS.map((book, index) => ({
-    id: index + 1,
-    ...book
-}));
-
 function formatAuthors(writtenByField = {}) {
     if (!writtenByField) return '';
 
@@ -80,8 +75,6 @@ function formatGenrePreview(genreField) {
     return display;
 }
 
-const searchTextCache = new Map();
-
 function buildSearchableText(book) {
     const fields = [
         book.title,
@@ -101,29 +94,34 @@ function buildSearchableText(book) {
     return fields
         .filter(Boolean)
         .map(value => String(value).toLowerCase())
-        .join(' | ');
+        .join(' ');
 }
 
-function getSearchText(book) {
-    if (!searchTextCache.has(book.id)) {
-        searchTextCache.set(book.id, buildSearchableText(book));
-    }
-    return searchTextCache.get(book.id);
+function precomputeSearchText() {
+    BOOKS.forEach(book => {
+        Object.defineProperty(book, '__searchText', {
+            value: buildSearchableText(book),
+            enumerable: false
+        });
+    });
 }
 
-function matchesSearch(book, term) {
-    if (!term) return true;
-
-    return getSearchText(book).includes(term);
+function matchesSearch(book, tokens = []) {
+    if (!tokens.length) return true;
+    const searchText = book.__searchText || buildSearchableText(book);
+    return tokens.every(token => searchText.includes(token));
 }
 
 function renderBooks(searchTerm = '') {
     const list = document.getElementById('book-list');
     list.innerHTML = '';
 
-    const term = searchTerm.toLowerCase().trim();
+    const tokens = searchTerm
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
 
-    const filtered = booksWithIds.filter(book => matchesSearch(book, term));
+    const filtered = BOOKS.filter(book => matchesSearch(book, tokens));
 
     document.getElementById('book-count').textContent = `${filtered.length} items`;
 
@@ -135,7 +133,7 @@ function renderBooks(searchTerm = '') {
     filtered.forEach(book => {
         const row = document.createElement('tr');
         // Add click handler for details.
-        row.onclick = () => showDetails(book.id);
+        row.onclick = () => showDetails(book['isbn-13']);
 
         const authorDisplay = formatAuthorPreview(book['written-by']);
         const genreDisplay = formatGenrePreview(book.genre);
@@ -151,8 +149,8 @@ function renderBooks(searchTerm = '') {
     });
 }
 
-function showDetails(id) {
-    const book = booksWithIds.find(b => b.id === id);
+function showDetails(isbn) {
+    const book = BOOKS.find(b => b['isbn-13'] === isbn);
     if (!book) return;
 
     window.location.hash = `${book['isbn-13']}`;
@@ -184,10 +182,7 @@ function handleRouting() {
     const isbn = hash.substring(1);
 
     if (isbn) {
-        const book = booksWithIds.find(b => b['isbn-13'] === isbn);
-        if (book) {
-            showDetails(book.id);
-        }
+        showDetails(isbn);
     } else {
         // If there is no ISBN in the hash but the modal is open, close it.
         if (document.getElementById('detail-modal').style.display === 'flex') {
@@ -197,6 +192,7 @@ function handleRouting() {
 }
 
 initTheme();
+precomputeSearchText();
 renderBooks();
 handleRouting();
 

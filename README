@@ -16,6 +16,19 @@ in a straightforward way and have a consistent and easy-to-use design, and
 it should always be accessible (shouldn't get removed or deprecated) while
 I am alive using it.
 
+Detect Duplicated ISBNs
+-----
+
+To detect duplicated ISBNs in `books.js` (which should never be the case),
+run the following command:
+
+```sh
+grep '"isbn-13":' ./books.js | sort | uniq -d
+```
+
+If this command outputs any ISBNs, it means they are used more than once
+and must be corrected before serving the app.
+
 Usage
 -----
 

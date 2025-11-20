@@ -155,6 +155,8 @@ function showDetails(id) {
     const book = booksWithIds.find(b => b.id === id);
     if (!book) return;
 
+    window.location.hash = `${book['isbn-13']}`;
+
     document.getElementById('m-title').textContent = book.title;
     document.getElementById('m-author').textContent = formatAuthors(book['written-by'], { includePrefix: true });
     document.getElementById('m-orig-title').textContent = book['original-title'];
@@ -173,11 +175,33 @@ function showDetails(id) {
 
 function closeModal() {
     document.getElementById('detail-modal').style.display = 'none';
+    window.location.hash = '';
+}
+
+function handleRouting() {
+    const hash = window.location.hash;
+    // Remove '#'
+    const isbn = hash.substring(1);
+
+    if (isbn) {
+        const book = booksWithIds.find(b => b['isbn-13'] === isbn);
+        if (book) {
+            showDetails(book.id);
+        }
+    } else {
+        // If there is no ISBN in the hash but the modal is open, close it.
+        if (document.getElementById('detail-modal').style.display === 'flex') {
+            closeModal();
+        }
+    }
 }
 
 initTheme();
 renderBooks();
+handleRouting();
 
 document.getElementById('search-input').addEventListener('input', (e) => {
     renderBooks(e.target.value);
 });
+
+window.addEventListener('hashchange', handleRouting);

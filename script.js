@@ -91,7 +91,7 @@ function matchesSearch(book, term) {
         book.language,
         book['original-language'],
         book.publisher,
-        book.print,
+        book.edition,
         book['originally-published'],
         book['print-year'],
         book['isbn-13'],
@@ -151,7 +151,7 @@ function showDetails(id) {
     document.getElementById('m-genre').textContent = formatGenres(book.genre);
     document.getElementById('m-lang').textContent = book.language;
     document.getElementById('m-publisher').textContent = book.publisher;
-    document.getElementById('m-print').textContent = book.print;
+    document.getElementById('m-edition').textContent = book.edition;
     document.getElementById('m-summary').textContent = book.summary;
 
     document.getElementById('detail-modal').style.display = 'flex';

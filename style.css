@@ -179,9 +179,10 @@ tr:hover td {
     text-decoration: none;
 }
 
-.source-link a:hover,
-.source-link a:focus {
-    text-decoration: underline;
+.book-link,
+.book-link:visited {
+    color: inherit;
+    text-decoration: none;
 }
 
 .details-overlay {

@@ -75,7 +75,7 @@ function formatGenrePreview(genreField) {
     return display;
 }
 
-function buildSearchableText(book) {
+function buildSearchableText(book, isbn) {
     const fields = [
         book.title,
         book['original-title'],
@@ -87,7 +87,7 @@ function buildSearchableText(book) {
         book.edition,
         book['originally-published'],
         book['print-year'],
-        book['isbn-13'],
+        isbn,
         book.summary
     ];
 
@@ -98,17 +98,17 @@ function buildSearchableText(book) {
 }
 
 function precomputeSearchText() {
-    BOOKS.forEach(book => {
+    BOOKS.forEach((book, isbn) => {
         Object.defineProperty(book, '__searchText', {
-            value: buildSearchableText(book),
+            value: buildSearchableText(book, isbn),
             enumerable: false
         });
     });
 }
 
-function matchesSearch(book, tokens = []) {
+function matchesSearch(book, tokens, isbn) {
     if (!tokens.length) return true;
-    const searchText = book.__searchText || buildSearchableText(book);
+    const searchText = book.__searchText || buildSearchableText(book, isbn);
     return tokens.every(token => searchText.includes(token));
 }
 
@@ -121,7 +121,10 @@ function renderBooks(searchTerm = '') {
         .split(/\s+/)
         .filter(Boolean);
 
-    const filtered = BOOKS.filter(book => matchesSearch(book, tokens));
+    const filtered = [];
+    BOOKS.forEach((book, isbn) => {
+        if (matchesSearch(book, tokens, isbn)) filtered.push({ isbn, book });
+    });
 
     document.getElementById('book-count').textContent = `${filtered.length} items`;
 
@@ -130,10 +133,10 @@ function renderBooks(searchTerm = '') {
         return;
     }
 
-    filtered.forEach(book => {
+    filtered.forEach(({ book, isbn }) => {
         const row = document.createElement('tr');
         // Add click handler for details.
-        row.onclick = () => showDetails(book['isbn-13']);
+        row.onclick = () => showDetails(isbn);
 
         const authorDisplay = formatAuthorPreview(book['written-by']);
         const genreDisplay = formatGenrePreview(book.genre);
@@ -143,17 +146,17 @@ function renderBooks(searchTerm = '') {
              <td class="col-written-by">${authorDisplay}</td>
              <td class="col-genre">${genreDisplay}</td>
              <td class="col-lang">${book.language}</td>
-             <td class="col-isbn">${book['isbn-13']}</td>
+             <td class="col-isbn">${isbn}</td>
          `;
         list.appendChild(row);
     });
 }
 
 function showDetails(isbn) {
-    const book = BOOKS.find(b => b['isbn-13'] === isbn);
+    const book = BOOKS.get(isbn);
     if (!book) return;
 
-    window.location.hash = `${book['isbn-13']}`;
+    window.location.hash = isbn;
 
     document.getElementById('m-title').textContent = book.title;
     document.getElementById('m-author').textContent = formatAuthors(book['written-by'], { includePrefix: true });
@@ -161,7 +164,7 @@ function showDetails(isbn) {
     document.getElementById('m-orig-lang').textContent = book['original-language'];
     document.getElementById('m-published-year').textContent = book['originally-published'];
     document.getElementById('m-print-year').textContent = book['print-year'];
-    document.getElementById('m-isbn').textContent = book['isbn-13'];
+    document.getElementById('m-isbn').textContent = isbn;
     document.getElementById('m-genre').textContent = formatGenres(book.genre);
     document.getElementById('m-lang').textContent = book.language;
     document.getElementById('m-publisher').textContent = book.publisher;

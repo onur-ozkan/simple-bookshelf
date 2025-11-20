@@ -163,11 +163,17 @@ function renderBooks(searchTerm = '') {
     });
 }
 
+function setPageTitle(bookTitle = '') {
+    const default_title = './bookshelf';
+    document.title = bookTitle ? `${bookTitle} | ${default_title}` : default_title;
+}
+
 function showDetails(isbn) {
     const book = BOOKS.get(isbn);
     if (!book) return;
 
     window.location.hash = isbn;
+    setPageTitle(book.title);
 
     document.getElementById('m-title').textContent = book.title;
     document.getElementById('m-author').textContent = formatAuthors(book['written-by'], { includePrefix: true });
@@ -188,6 +194,7 @@ function showDetails(isbn) {
 function closeModal() {
     document.getElementById('detail-modal').style.display = 'none';
     window.location.hash = '';
+    setPageTitle();
 }
 
 function handleRouting() {

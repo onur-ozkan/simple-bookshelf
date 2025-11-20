@@ -80,9 +80,9 @@ function formatGenrePreview(genreField) {
     return display;
 }
 
-function matchesSearch(book, term) {
-    if (!term) return true;
+const searchTextCache = new Map();
 
+function buildSearchableText(book) {
     const fields = [
         book.title,
         book['original-title'],
@@ -98,9 +98,23 @@ function matchesSearch(book, term) {
         book.summary
     ];
 
-    return fields.some(value =>
-        value && String(value).toLowerCase().includes(term)
-    );
+    return fields
+        .filter(Boolean)
+        .map(value => String(value).toLowerCase())
+        .join(' | ');
+}
+
+function getSearchText(book) {
+    if (!searchTextCache.has(book.id)) {
+        searchTextCache.set(book.id, buildSearchableText(book));
+    }
+    return searchTextCache.get(book.id);
+}
+
+function matchesSearch(book, term) {
+    if (!term) return true;
+
+    return getSearchText(book).includes(term);
 }
 
 function renderBooks(searchTerm = '') {

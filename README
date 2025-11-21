@@ -48,12 +48,16 @@ If this command outputs any ISBNs, it means that they are used more than
 once. Having duplicated ISBNs doesn't break the app but it usually means
 you are trying to record the same book twice.
 
-Usage
+Automate duplication checks
 -----
 
-1. Edit the `BOOKS` in `books.js` with your collection.
-2. Open (or serve) `index.html` in a browser to browse and search your
-books anywhere online.
+Instead of running the ID and ISBN commands separately, you can run the
+helper script:
+
+    ./find_duplications.sh
+
+It runs both checks sequentially and exits with a non-zero code if any
+duplicates are found.
 
 Why not app-level validations instead of using Linux commands?
 -----
@@ -61,3 +65,10 @@ Why not app-level validations instead of using Linux commands?
 The list is static and never changes once it's deployed. There is no need
 include runtime complexity (and overhead depending on the map size) that
 will execute at least once every page load.
+
+Usage
+-----
+
+1. Edit the `BOOKS` in `books.js` with your collection.
+2. Open (or serve) `index.html` in a browser to browse and search your
+books anywhere online.

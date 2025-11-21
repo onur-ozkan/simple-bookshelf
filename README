@@ -1,4 +1,4 @@
-simple-bookshelf
+simple-library
 ================
 
 Why?
@@ -12,9 +12,9 @@ memorable.
 To solve this problem, I need a very simple and fast app without ads and
 unnecessary features/bloat and it shouldn't require me to install an app
 just to search a piece of information. The app should store book information
-in a straightforward way and have a consistent and easy-to-use design, and
-it should always be accessible (shouldn't get removed or deprecated) while
-I am alive using it.
+in a straightforward way, support full-text searching and have a consistent,
+easy-to-use design. It should always be accessible (shouldn't get removed or
+deprecated) while I am alive using it.
 
 Detect Duplicated ISBNs
 -----
@@ -34,4 +34,4 @@ Usage
 
 1. Edit the `BOOKS` in `books.js` with your collection.
 2. Open (or serve) `index.html` in a browser to browse and search your
-bookshelf anywhere online.
+books anywhere online.

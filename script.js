@@ -162,7 +162,7 @@ function renderBooks(searchTerm = '') {
 }
 
 function setPageTitle(bookTitle = '') {
-    document.title = bookTitle ? `${bookTitle} | bookshelf` : "bookshelf";
+    document.title = bookTitle ? `${bookTitle} | library` : "library";
 }
 
 function showDetails(isbn) {

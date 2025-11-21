@@ -134,9 +134,7 @@ function renderBooks(searchTerm = '') {
     }
 
     filtered.forEach(({ book, isbn }) => {
-        // Click handler for details.
         const row = document.createElement('tr');
-        row.onclick = () => showDetails(isbn);
 
         const href = `#${isbn}`;
         const authorDisplay = formatAuthorPreview(book['written-by']);
@@ -144,19 +142,19 @@ function renderBooks(searchTerm = '') {
 
         row.innerHTML = `
              <td class="col-title">
-                 <a class="book-link" href="${href}" onclick="event.stopPropagation();">${book.title}</a>
+                 <a class="book-link" href="${href}">${book.title}</a>
              </td>
              <td class="col-written-by">
-                 <a class="book-link" href="${href}" onclick="event.stopPropagation();">${authorDisplay}</a>
+                 <a class="book-link" href="${href}">${authorDisplay}</a>
              </td>
              <td class="col-genre">
-                 <a class="book-link" href="${href}" onclick="event.stopPropagation();">${genreDisplay}</a>
+                 <a class="book-link" href="${href}">${genreDisplay}</a>
              </td>
              <td class="col-lang">
-                 <a class="book-link" href="${href}" onclick="event.stopPropagation();">${book.language}</a>
+                 <a class="book-link" href="${href}">${book.language}</a>
              </td>
              <td class="col-isbn">
-                 <a class="book-link" href="${href}" onclick="event.stopPropagation();">${isbn}</a>
+                 <a class="book-link" href="${href}">${isbn}</a>
              </td>
          `;
         list.appendChild(row);

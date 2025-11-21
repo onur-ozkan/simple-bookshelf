@@ -2,7 +2,7 @@ simple-library
 ================
 
 Why?
----
+-----
 
 I often need to look up details about the books I own when I am outside.
 But that's not always possible because I own and read a lot of books and
@@ -11,20 +11,42 @@ memorable.
 
 To solve this problem, I need a very simple and fast app without ads and
 unnecessary features/bloat and it shouldn't require me to install an app
-just to search a piece of information. The app should store book information
+just to search a piece of information. The app should record book information
 in a straightforward way, support full-text searching and have a consistent,
 easy-to-use design. It should always be accessible (shouldn't get removed or
 deprecated) while I am alive using it.
 
-Detect Duplicated ISBNs
+Ordering
+-----
+
+The order of the list follows the order of the records in `BOOKS`.
+
+Detect duplicated IDs
+-----
+
+Each book ID must be unique so their links and details window can work
+properly. To detect duplicated IDs, run the following command:
+
+    grep -oP '^\s*\K\d+(?=,)' books.js | sort -n | uniq -d
+
+
+If this command outputs any IDs, it means that they are used more than
+once and you should fix them. Otherwise, only the first book with the same
+ID will be displayed in the list.
+
+Run this before each deployment to avoid serving a broken version of
+your app.
+
+Detect duplicated ISBNs
 -----
 
 To detect duplicated ISBNs in `books.js`, run the following command:
 
-    grep -n '"isbn":' books.js | awk -F '"' '{print $4}' | uniq -d
+    grep -n '"isbn":' books.js | awk -F '"' '{print $4}' | sort | uniq -d
 
 If this command outputs any ISBNs, it means that they are used more than
-once.
+once. Having duplicated ISBNs doesn't break the app but it usually means
+you are trying to record the same book twice.
 
 Usage
 -----
@@ -32,3 +54,10 @@ Usage
 1. Edit the `BOOKS` in `books.js` with your collection.
 2. Open (or serve) `index.html` in a browser to browse and search your
 books anywhere online.
+
+Why not app-level validations instead of using Linux commands?
+-----
+
+The list is static and never changes once it's deployed. There is no need
+include runtime complexity (and overhead depending on the map size) that
+will execute at least once every page load.

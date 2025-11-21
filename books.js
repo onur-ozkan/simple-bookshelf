@@ -1,8 +1,9 @@
 // TODO: Store all my books here.
 const BOOKS = new Map([
     [
-        "978-6254299766",
+        1,
         {
+            "isbn": "978-6254299766",
             "title": "Zaman Felsefesinin Kısa Tarihi",
             "original-title": "A Brief History of the Philosophy of Time",
             "original-language": "EN",
@@ -20,8 +21,9 @@ const BOOKS = new Map([
         }
     ],
     [
-        "978-6051067360",
+        2,
         {
+            "isbn": "978-6051067360",
             "title": "Kaos: Kaosun Başucu Kitabı",
             "original-title": "Chaos: Making a New Science",
             "original-language": "EN",
@@ -39,8 +41,9 @@ const BOOKS = new Map([
         }
     ],
     [
-        "978-0141027821",
+        3,
         {
+            "isbn": "978-0141027821",
             "title": "The Sleepwalkers: How Europe Went to War in 1914",
             "original-title": "The Sleepwalkers: How Europe Went to War in 1914",
             "original-language": "EN",
@@ -57,8 +60,9 @@ const BOOKS = new Map([
         }
     ],
     [
-        "978-1512182378",
+        4,
         {
+            "isbn": "978-1512182378",
             "title": "Through South Africa",
             "original-title": "Through South Africa",
             "original-language": "EN",

@@ -75,7 +75,7 @@ function formatGenrePreview(genreField) {
     return display;
 }
 
-function buildSearchableText(book, isbn) {
+function buildSearchableText(book, identifier = '') {
     const fields = [
         book.title,
         book['original-title'],
@@ -87,7 +87,8 @@ function buildSearchableText(book, isbn) {
         book.edition,
         book['originally-published'],
         book['print-year'],
-        isbn,
+        book.isbn,
+        identifier,
         book.summary
     ];
 
@@ -98,17 +99,17 @@ function buildSearchableText(book, isbn) {
 }
 
 function precomputeSearchText() {
-    BOOKS.forEach((book, isbn) => {
+    BOOKS.forEach((book, id) => {
         Object.defineProperty(book, '__searchText', {
-            value: buildSearchableText(book, isbn),
+            value: buildSearchableText(book, id),
             enumerable: false
         });
     });
 }
 
-function matchesSearch(book, tokens, isbn) {
+function matchesSearch(book, tokens) {
     if (!tokens.length) return true;
-    const searchText = book.__searchText || buildSearchableText(book, isbn);
+    const searchText = book.__searchText || buildSearchableText(book);
     return tokens.every(token => searchText.includes(token));
 }
 
@@ -122,8 +123,8 @@ function renderBooks(searchTerm = '') {
         .filter(Boolean);
 
     const filtered = [];
-    BOOKS.forEach((book, isbn) => {
-        if (matchesSearch(book, tokens, isbn)) filtered.push({ isbn, book });
+    BOOKS.forEach((book, id) => {
+        if (matchesSearch(book, tokens)) filtered.push({ id, book });
     });
 
     document.getElementById('book-count').textContent = `${filtered.length} items`;
@@ -133,12 +134,13 @@ function renderBooks(searchTerm = '') {
         return;
     }
 
-    filtered.forEach(({ book, isbn }) => {
+    filtered.forEach(({ book, id }) => {
         const row = document.createElement('tr');
 
-        const href = `#${isbn}`;
+        const href = `#${id}`;
         const authorDisplay = formatAuthorPreview(book['written-by']);
         const genreDisplay = formatGenrePreview(book['genre']);
+        const isbnDisplay = book.isbn || 'N/A';
 
         row.innerHTML = `
              <td class="col-title">
@@ -154,7 +156,7 @@ function renderBooks(searchTerm = '') {
                  <a class="book-link" href="${href}">${book.language}</a>
              </td>
              <td class="col-isbn">
-                 <a class="book-link" href="${href}">${isbn}</a>
+                 <a class="book-link" href="${href}">${isbnDisplay}</a>
              </td>
          `;
         list.appendChild(row);
@@ -165,11 +167,11 @@ function setPageTitle(bookTitle = '') {
     document.title = bookTitle ? `${bookTitle} | library` : "library";
 }
 
-function showDetails(isbn) {
-    const book = BOOKS.get(isbn);
+function showDetails(id) {
+    const book = BOOKS.get(id);
     if (!book) return;
 
-    window.location.hash = isbn;
+    window.location.hash = id;
     setPageTitle(book.title);
 
     document.getElementById('m-title').textContent = book.title;
@@ -178,7 +180,7 @@ function showDetails(isbn) {
     document.getElementById('m-orig-lang').textContent = book['original-language'];
     document.getElementById('m-published-year').textContent = book['originally-published'];
     document.getElementById('m-print-year').textContent = book['print-year'];
-    document.getElementById('m-isbn').textContent = isbn;
+    document.getElementById('m-isbn').textContent = book.isbn || 'N/A';
     document.getElementById('m-genre').textContent = formatGenres(book.genre);
     document.getElementById('m-lang').textContent = book.language;
     document.getElementById('m-publisher').textContent = book.publisher;
@@ -196,13 +198,12 @@ function closeModal() {
 
 function handleRouting() {
     const hash = window.location.hash;
-    // Remove '#'
-    const isbn = hash.substring(1);
+    const id = hash.startsWith('#') ? hash.substring(1) : hash;
 
-    if (isbn) {
-        showDetails(isbn);
+    if (id) {
+        showDetails(Number(id));
     } else {
-        // If there is no ISBN in the hash but the modal is open, close it.
+        // If there is no ID in the hash but the modal is open, close it.
         if (document.getElementById('detail-modal').style.display === 'flex') {
             closeModal();
         }

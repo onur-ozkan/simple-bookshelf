@@ -37,13 +37,13 @@ body {
     color: var(--text-color);
     background-color: var(--bg-color);
     margin: 2rem;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.4;
     transition: background-color 0.3s, color 0.3s;
 }
 
 h1 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     margin: 0;
 }
@@ -148,7 +148,7 @@ tr:hover td {
 
 .footer {
     margin-top: 40px;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--secondary-text);
     border-top: 1px solid var(--input-border);
     padding-top: 10px;
@@ -164,7 +164,7 @@ tr:hover td {
 }
 
 .source-link {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--secondary-text);
     display: flex;
     flex-direction: column;
@@ -286,7 +286,7 @@ tr:hover td {
         white-space: normal;
         word-wrap: break-word;
         word-break: break-word;
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .col-title {

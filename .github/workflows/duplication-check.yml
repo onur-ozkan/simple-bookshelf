@@ -1,0 +1,30 @@
+name: Detect duplicated IDs and ISBNs
+
+on:
+  push:
+
+jobs:
+  detect-duplications:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Execute duplication detection commands
+        run: |
+          set -euo pipefail
+
+          echo "Checking duplicated IDs"
+          duplicated_ids=$(grep -oP '^\s*\K\d+(?=,)' books.js | sort -n | uniq -d)
+          if [[ -n "$duplicated_ids" ]]; then
+            echo "Duplicate IDs detected:"
+            echo "$duplicated_ids"
+            exit 1
+          fi
+
+          echo "Checking duplicated ISBNs..."
+          duplicated_isbns=$(grep -n '"isbn":' books.js | awk -F '"' '{print $4}' | sort | uniq -d)
+          if [[ -n "$duplicated_isbns" ]]; then
+            echo "Duplicate ISBNs detected:"
+            echo "$duplicated_isbns"
+            exit 1
+          fi

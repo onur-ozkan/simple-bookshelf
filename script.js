@@ -164,8 +164,7 @@ function renderBooks(searchTerm = '') {
 }
 
 function setPageTitle(bookTitle = '') {
-    const default_title = './bookshelf';
-    document.title = bookTitle ? `${bookTitle} | ${default_title}` : default_title;
+    document.title = bookTitle ? `${bookTitle} | bookshelf` : "bookshelf";
 }
 
 function showDetails(isbn) {
